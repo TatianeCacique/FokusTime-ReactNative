@@ -32,7 +32,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="timer"
         options={{
           title: t('timer', settings.locale),
           tabBarIcon: ({ size, color }) => (

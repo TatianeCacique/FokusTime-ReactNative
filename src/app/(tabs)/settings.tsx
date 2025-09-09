@@ -13,10 +13,14 @@ import {
 import { useSettingsStore } from '@/src/store/settings.store';
 import { StorageService } from '@/src/services/storage';
 import { t } from '@/src/i18n';
+import { useAuth } from '@/src/hooks/useAuth';
+import { useRouter } from 'expo-router';
 
 export default function SettingsScreen() {
   const { settings, updateSettings, resetSettings } = useSettingsStore();
   const [localSettings, setLocalSettings] = useState(settings);
+  const { signOut } = useAuth();
+  const router = useRouter();
 
   React.useEffect(() => {
     setLocalSettings(settings);
@@ -156,7 +160,15 @@ export default function SettingsScreen() {
         {/* Data Management */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('dataManagement', settings.locale)}</Text>
-          
+          {/* Botão de editar dados */}
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => router.replace('../AlterarDados')}
+            accessibilityLabel="Editar dados do usuário"
+            accessibilityRole="button"
+          >
+            <Text style={styles.editButtonText}>Editar dados</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.dangerButton}
             onPress={handleResetData}
@@ -164,6 +176,14 @@ export default function SettingsScreen() {
             accessibilityRole="button"
           >
             <Text style={styles.dangerButtonText}>{t('resetData', settings.locale)}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.logoutButton}
+            onPress={signOut}
+            accessibilityLabel="Sair da conta"
+            accessibilityRole="button"
+          >
+            <Text style={styles.logoutButtonText}>Sair</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -325,6 +345,34 @@ const styles = StyleSheet.create({
   },
   dangerButtonText: {
     color: '#DC2626',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  logoutButton: {
+    backgroundColor: '#E0F7FA',
+    borderWidth: 1,
+    borderColor: '#B2EBF2',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  logoutButtonText: {
+    color: '#00796B',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  editButton: {
+    backgroundColor: '#E8F5E9',
+    borderWidth: 1,
+    borderColor: '#C8E6C9',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  editButtonText: {
+    color: '#2E7D32',
     fontSize: 16,
     fontWeight: '600',
   },
