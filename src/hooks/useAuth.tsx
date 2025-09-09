@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
       if (user) {
         setAuthUser(user);
         console.log("Usuário logado com sucesso!");
-        router.replace('/(tabs)/timer');
+  router.replace('../(tabs)/timer');
       } else {
         alert("Email ou senha inválidos!");
       }
@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
     if (typeof window !== 'undefined' && !(window as any).expoRouterReady) return;
 
     if (authUser && !inAuthGroup) {
-      router.replace('/(tabs)/timer');
+  router.replace('../(tabs)/timer');
     } else if (!authUser && inAuthGroup) {
       router.replace('/');
     }

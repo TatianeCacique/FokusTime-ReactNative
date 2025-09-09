@@ -163,7 +163,7 @@ export default function SettingsScreen() {
           {/* Botão de editar dados */}
           <TouchableOpacity
             style={styles.editButton}
-            onPress={() => router.replace('/AlterarDados')}
+            onPress={() => router.replace('../AlterarDados')}
             accessibilityLabel="Editar dados do usuário"
             accessibilityRole="button"
           >
