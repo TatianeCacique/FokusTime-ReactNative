@@ -3,8 +3,11 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'reac
 import { useAuth } from '../hooks/useAuth';
 import { Link } from 'expo-router';
 import { Timer } from 'lucide-react-native';
+import { Stack } from "expo-router";
+
 
 export default function Login() {
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { signIn } = useAuth();
@@ -19,7 +22,7 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      {/* Header customizado */}
+      <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.header}>
         <Timer size={32} color="#DC2626" style={{ marginRight: 8 }} />
         <Text style={styles.appName}>FocusTime</Text>

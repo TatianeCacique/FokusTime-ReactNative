@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'reac
 import { Link, useRouter } from 'expo-router';
 import { Timer } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Stack } from "expo-router";
 
 export default function Register() {
   const [nome, setNome] = useState('');
@@ -17,7 +18,7 @@ export default function Register() {
     }
     // Validação de email: deve conter '@'
     if (!email.includes('@')) {
-      Alert.alert('Erro', 'Digite um email válido, ex: usuario@algumacoisa');
+      Alert.alert('Erro', 'Digite um email válido');
       return;
     }
     try {
@@ -48,6 +49,7 @@ export default function Register() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.header}>
         <Timer size={32} color="#DC2626" style={{ marginRight: 8 }} />
         <Text style={styles.appName}>FocusTime</Text>
