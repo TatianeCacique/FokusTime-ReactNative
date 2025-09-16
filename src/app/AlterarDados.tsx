@@ -3,6 +3,8 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'reac
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../hooks/useAuth';
+import { Trash2 } from 'lucide-react-native';
+import { Stack } from "expo-router";
 
 type User = {
   nome: string;
@@ -52,8 +54,45 @@ export default function AlterarDados() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    Alert.alert(
+      "Excluir conta",
+      "Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Excluir",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const storedUsers = await AsyncStorage.getItem('users');
+              let users = storedUsers ? JSON.parse(storedUsers) : [];
+              // Remove o usuário logado
+              const filteredUsers = users.filter((u: any) => u.email !== user?.email);
+              await AsyncStorage.setItem('users', JSON.stringify(filteredUsers));
+              await AsyncStorage.removeItem('currentUser');
+              Alert.alert("Conta excluída", "Sua conta foi excluída com sucesso.");
+              signOut();
+            } catch (error) {
+              Alert.alert("Erro", "Não foi possível excluir a conta.");
+            }
+          }
+        }
+      ]
+    );
+  };
+
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <TouchableOpacity
+        style={styles.cancelLink}
+        onPress={() => router.replace('../(tabs)/settings')}
+        accessibilityLabel="Cancelar"
+        accessibilityRole="button"
+      >
+        <Text style={styles.cancelLinkText}>Cancelar</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Alterar Dados</Text>
       <TextInput
         style={styles.input}
@@ -79,6 +118,10 @@ export default function AlterarDados() {
       <TouchableOpacity style={styles.button} onPress={handleUpdate}>
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAccount}>
+        <Trash2 size={18} color="#D32F2F" style={{ marginRight: 6 }} />
+        <Text style={styles.deleteButtonText}>Excluir conta</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -90,11 +133,26 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
+  cancelLink: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 1,
+    padding: 0,
+    backgroundColor: 'transparent',
+  },
+  cancelLinkText: {
+    color: '#007bff',
+    fontSize: 16,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    marginTop: 40,
   },
   input: {
     width: '100%',
@@ -120,5 +178,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 13,
     fontFamily: 'System',
+  },
+  deleteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF0F0',
+    borderWidth: 1,
+    borderColor: '#FFCDD2',
+    padding: 10,
+    borderRadius: 8,
+    alignSelf: 'center',
+    marginTop: 12,
+  },
+  deleteButtonText: {
+    color: '#D32F2F',
+    fontSize: 15,
+    fontWeight: '600',
   },
 });
